@@ -15,6 +15,7 @@
 
 import socket
 import os
+from Crypto.Cipher import AES
 
 
 host = "localhost"
@@ -27,10 +28,10 @@ def pad_message(message):
     return message + " "*((16-len(message))%16)
 
 
-# TODO: Generate a cryptographically random AES key
+# TODO: Generate a cryptographically random AES session key
 def generate_key():
-    # TODO: Implement this function
-    pass
+    key = os.urandom(16)
+    return key
 
 
 # Takes an AES session key and encrypts it using the appropriate
@@ -42,14 +43,20 @@ def encrypt_handshake(session_key):
 
 # Encrypts the message using AES. Same as server function
 def encrypt_message(message, session_key):
-    # TODO: Implement this function
-    pass
+    #https://gist.github.com/syedrakib/d71c463fc61852b8d366
+    cipher = AES.new(session_key)
+    padded_message = pad_message(message)
+    enc_message = cipher.encrypt(padded_message)
+    return enc_message
 
 
 # Decrypts the message using AES. Same as server function
 def decrypt_message(message, session_key):
-    # TODO: Implement this function
-    pass
+    cipher = AES.new(session_key)
+    dec_message = cipher.decrypt(client_message)
+    #unpad the decrypted message:
+    message = dec_message.rstrip(" ")
+    return message
 
 
 # Sends a message over TCP

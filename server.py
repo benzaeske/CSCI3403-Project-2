@@ -14,6 +14,7 @@
 """
 import hashlib
 import socket
+from Crypto.Cipher import AES
 
 host = "localhost"
 port = 10001
@@ -32,14 +33,21 @@ def decrypt_key(session_key):
 
 # Write a function that decrypts a message using the session key
 def decrypt_message(client_message, session_key):
-    # TODO: Implement this function
-    pass
+    #https://gist.github.com/syedrakib/d71c463fc61852b8d366
+    cipher = AES.new(session_key)
+    dec_message = cipher.decrypt(client_message)
+    #unpad the decrypted message:
+    message = dec_message.rstrip(" ")
+    return message
 
 
 # Encrypt a message using the session key
 def encrypt_message(message, session_key):
-    # TODO: Implement this function
-    pass
+    #https://gist.github.com/syedrakib/d71c463fc61852b8d366
+    cipher = AES.new(session_key)
+    padded_message = pad_message(message)
+    enc_message = cipher.encrypt(padded_message)
+    return enc_message
 
 
 # Receive 1024 bytes from the client
