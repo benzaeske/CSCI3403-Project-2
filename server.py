@@ -12,7 +12,7 @@
 
 
 """
-
+import hashlib
 import socket
 
 host = "localhost"
@@ -66,8 +66,11 @@ def verify_hash(user, password):
         for line in reader.read().split('\n'):
             line = line.split("\t")
             if line[0] == user:
-                # TODO: Generate the hashed password
-                # hashed_password =
+                #append salt to password:
+                passWithSalt = password + str(line[1])
+                #hash the slated password:
+                hashed = hashlib.md5(passWithSalt.encode())
+                hashed_password = hashed.hexdigest()
                 return hashed_password == line[2]
         reader.close()
     except FileNotFoundError:
