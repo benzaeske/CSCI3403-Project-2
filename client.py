@@ -34,8 +34,7 @@ def generate_key():
     return key
 
 
-# Takes an AES session key and encrypts it using the appropriate
-# key and return the value
+# Takes an AES session key and encrypts it using the server's public key:
 def encrypt_handshake(session_key):
     # TODO: Implement this function
     pass
@@ -52,6 +51,7 @@ def encrypt_message(message, session_key):
 
 # Decrypts the message using AES. Same as server function
 def decrypt_message(message, session_key):
+    #https://gist.github.com/syedrakib/d71c463fc61852b8d366
     cipher = AES.new(session_key)
     dec_message = cipher.decrypt(client_message)
     #unpad the decrypted message:
@@ -101,6 +101,8 @@ def main():
             exit(0)
 
         # TODO: Encrypt message and send to server
+        enc_message = encrypt_message(message)
+        send_message(sock, enc_message)
 
         # TODO: Receive and decrypt response from server
     finally:

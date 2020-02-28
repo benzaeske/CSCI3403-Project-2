@@ -116,6 +116,7 @@ def main():
                 ciphertext_message = receive_message(connection)
 
                 # TODO: Decrypt message from client
+                dec_message = decrypt_message(ciphertext_message)
 
                 # TODO: Split response from user into the username and password
 
