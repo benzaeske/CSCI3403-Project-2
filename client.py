@@ -36,8 +36,12 @@ def generate_key():
 
 # Takes an AES session key and encrypts it using the server's public key:
 def encrypt_handshake(session_key):
-    # TODO: Implement this function
-    pass
+    #Read in the stored public key
+    f = open('publicKey.pem', 'r')
+    key = RSA.importKey(f.read())
+    #perform encryption and return
+    encrypted_key = key.encrypt(session_key.encode(), 32)
+    return encrypted_key
 
 
 # Encrypts the message using AES. Same as server function

@@ -27,8 +27,12 @@ def pad_message(message):
 
 # Write a function that decrypts a message using the server's private key
 def decrypt_key(session_key):
-    # TODO: Implement this function
-    pass
+    #Read in saved private key
+    f = open("privateKey.pem", 'r')
+    key = RSA.importKey(f.read())
+    #perform decryption and return
+    decrypted_key = key.decrypt(session_key).decode()
+    return decrypted_key
 
 
 # Write a function that decrypts a message using the session key
