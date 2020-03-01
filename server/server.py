@@ -15,6 +15,7 @@
 import hashlib
 import socket
 from Crypto.Cipher import AES
+from Crypto.PublicKey import RSA
 
 host = "localhost"
 port = 10001
@@ -27,8 +28,12 @@ def pad_message(message):
 
 # Write a function that decrypts a message using the server's private key
 def decrypt_key(session_key):
-    # TODO: Implement this function
-    pass
+    #Read in saved private key
+    f = open("privateKey.pem", 'r')
+    key = RSA.importKey(f.read())
+    #perform decryption and return
+    decrypted_key = key.decrypt(session_key)
+    return decrypted_key
 
 
 # Write a function that decrypts a message using the session key
@@ -37,8 +42,7 @@ def decrypt_message(client_message, session_key):
     cipher = AES.new(session_key)
     dec_message = cipher.decrypt(client_message)
     #unpad the decrypted message:
-    message = dec_message.rstrip(" ")
-    return message
+    return dec_message
 
 
 # Encrypt a message using the session key
@@ -115,15 +119,23 @@ def main():
                 # Receive encrypted message from client
                 ciphertext_message = receive_message(connection)
 
-                # TODO: Decrypt message from client
-                dec_message = decrypt_message(ciphertext_message)
+                # Decrypt message from client
+                dec_message = decrypt_message(ciphertext_message, plaintext_key).decode()
 
-                # TODO: Split response from user into the username and password
+                # Split response from user into the username and password
+                user = dec_message.split()[0]
+                password = dec_message.split()[1]
 
-                # TODO: Encrypt response to client
+                # Encrypt response to client
+                response = "User cannot be authenticated."
+                if verify_hash(user, password):
+                    response = "User " + user + " has been authenticated."
+                
+                ciphertext_response = encrypt_message(response, plaintext_key)
 
                 # Send encrypted response
                 send_message(connection, ciphertext_response)
+
             finally:
                 # Clean up the connection
                 connection.close()

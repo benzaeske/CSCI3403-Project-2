@@ -16,6 +16,7 @@
 import socket
 import os
 from Crypto.Cipher import AES
+from Crypto.PublicKey import RSA
 
 
 host = "localhost"
@@ -36,8 +37,12 @@ def generate_key():
 
 # Takes an AES session key and encrypts it using the server's public key:
 def encrypt_handshake(session_key):
-    # TODO: Implement this function
-    pass
+    #Read in the stored public key
+    f = open('publicKey.pem', 'r')
+    key = RSA.importKey(f.read())
+    #perform encryption and return
+    encrypted_key = key.encrypt(session_key, 32)
+    return encrypted_key
 
 
 # Encrypts the message using AES. Same as server function
@@ -53,15 +58,13 @@ def encrypt_message(message, session_key):
 def decrypt_message(message, session_key):
     #https://gist.github.com/syedrakib/d71c463fc61852b8d366
     cipher = AES.new(session_key)
-    dec_message = cipher.decrypt(client_message)
-    #unpad the decrypted message:
-    message = dec_message.rstrip(" ")
-    return message
+    dec_message = cipher.decrypt(message)
+    return dec_message
 
 
 # Sends a message over TCP
 def send_message(sock, message):
-    sock.sendall(message)
+	sock.sendall(message)
 
 
 # Receive a message from TCP
@@ -93,18 +96,23 @@ def main():
         encrypted_key = encrypt_handshake(key)
 
         # Initiate handshake
-        send_message(sock, encrypted_key)
+        send_message(sock, encrypted_key[0])
 
         # Listen for okay from server (why is this necessary?)
         if receive_message(sock).decode() != "okay":
             print("Couldn't connect to server")
             exit(0)
 
-        # TODO: Encrypt message and send to server
-        enc_message = encrypt_message(message)
+        # Encrypt message and send to server
+        enc_message = encrypt_message(message, key)
         send_message(sock, enc_message)
 
-        # TODO: Receive and decrypt response from server
+        # Receive and decrypt response from server
+        server_response = receive_message(sock)
+        server_response = decrypt_message(server_response, key).decode()
+
+        print("Server: " + server_response)
+
     finally:
         print('closing socket')
         sock.close()
