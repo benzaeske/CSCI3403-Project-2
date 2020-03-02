@@ -47,6 +47,7 @@ def encrypt_handshake(session_key):
 
 # Encrypts the message using AES. Same as server function
 def encrypt_message(message, session_key):
+    #https://www.dlitz.net/software/pycrypto/api/current/Crypto.Cipher.AES-module.html
     #https://gist.github.com/syedrakib/d71c463fc61852b8d366
     cipher = AES.new(session_key)
     padded_message = pad_message(message)
@@ -56,6 +57,7 @@ def encrypt_message(message, session_key):
 
 # Decrypts the message using AES. Same as server function
 def decrypt_message(message, session_key):
+    #https://www.dlitz.net/software/pycrypto/api/current/Crypto.Cipher.AES-module.html
     #https://gist.github.com/syedrakib/d71c463fc61852b8d366
     cipher = AES.new(session_key)
     dec_message = cipher.decrypt(message)

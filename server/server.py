@@ -38,6 +38,7 @@ def decrypt_key(session_key):
 
 # Write a function that decrypts a message using the session key
 def decrypt_message(client_message, session_key):
+    #https://www.dlitz.net/software/pycrypto/api/current/Crypto.Cipher.AES-module.html
     #https://gist.github.com/syedrakib/d71c463fc61852b8d366
     cipher = AES.new(session_key)
     dec_message = cipher.decrypt(client_message)
@@ -47,6 +48,7 @@ def decrypt_message(client_message, session_key):
 
 # Encrypt a message using the session key
 def encrypt_message(message, session_key):
+    #https://www.dlitz.net/software/pycrypto/api/current/Crypto.Cipher.AES-module.html
     #https://gist.github.com/syedrakib/d71c463fc61852b8d366
     cipher = AES.new(session_key)
     padded_message = pad_message(message)

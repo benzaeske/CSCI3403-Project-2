@@ -7,7 +7,7 @@
 from Crypto.PublicKey import RSA
 
 #generate key pair
-#key = RSA.generate(1024)
+key = RSA.generate(1024)
 
 
 #write private key to file
@@ -19,9 +19,6 @@ f.close()
 #print("encrypting")
 #f = open('publicKey.pem', 'r')
 #key = RSA.importKey(f.read())
-#m = 'hello world!'
-#enc = key.encrypt(m.encode(), 32)
-#print("done encrypting")
 
 #Write public key to file
 f = open('publicKey.pem', 'wb')
