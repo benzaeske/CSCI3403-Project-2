@@ -83,7 +83,7 @@ def verify_hash(user, password):
                 #append salt to password:
                 passWithSalt = password + str(line[1])
                 #hash the slated password:
-                hashed = hashlib.md5(passWithSalt.encode())
+                hashed = hashlib.sha1(passWithSalt.encode())
                 hashed_password = hashed.hexdigest()
                 return hashed_password == line[2]
         reader.close()

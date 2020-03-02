@@ -21,7 +21,7 @@ salt = os.urandom(16)
 #Append salt to password
 passWithSalt = password + str(salt)
 #Hash the password
-hashed = hashlib.md5(passWithSalt.encode())
+hashed = hashlib.sha1(passWithSalt.encode())
 hashed_password = hashed.hexdigest()
 
 try:
